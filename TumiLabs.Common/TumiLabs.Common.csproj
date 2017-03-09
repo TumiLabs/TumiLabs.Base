@@ -34,6 +34,8 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,9 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AD\AD.cs" />
+    <Compile Include="AD\Comun.cs" />
+    <Compile Include="AD\GrupoAD.cs" />
+    <Compile Include="AD\LdapProvider.cs" />
+    <Compile Include="AD\LdapUserData.cs" />
+    <Compile Include="AD\UsuarioAD.cs" />
+    <Compile Include="BaseDisposable.cs" />
     <Compile Include="EncDec.cs" />
     <Compile Include="Kit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMTPHelper.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -455,18 +455,46 @@ namespace TumiLabs.Common
             return sb.ToString();
         }
 
-        public static void WriteTextLog(string strTexto, string strOrigen)
+        public static void WriteTextLog(string strTexto, string strOrigen, string LogFileNameSinExtension)
         {
-            string strPath = ConfigurationManager.AppSettings["PathLog"];
-            StreamWriter ws = new StreamWriter(strPath, true);
+            string LogFileNameCurrent = string.Empty;
+            string strPathFolderLog = ConfigurationManager.AppSettings["PathLog"];//E:\SharePointFiles\AppCertero\sislegal\Log\
+            DirectoryInfo folderPath = new DirectoryInfo(strPathFolderLog);
+
+            FileInfo[] archivosDeLog = folderPath.GetFiles(string.Format("{0}-????-??-??-??-??.txt", LogFileNameSinExtension)).OrderByDescending(x => x.CreationTime).ToArray();
+            bool bCrearNuevoArchivo = false;
+            if (archivosDeLog.Length > 0)
+            {
+                if (archivosDeLog[0].Length > 104857600)// (1048576 * 100) = 104857600 = 100 MB
+                    bCrearNuevoArchivo = true;
+                else
+                    LogFileNameCurrent = archivosDeLog[0].Name;
+            }
+            else
+                bCrearNuevoArchivo = true;
+
+            if (bCrearNuevoArchivo)
+                LogFileNameCurrent = string.Format("{0}-{1}.txt", LogFileNameSinExtension, DateTime.Now.ToString("yyyy-dd-MM-HH-mm"));
+
+            string strPathFileLog = string.Format("{0}\\{1}", strPathFolderLog, LogFileNameCurrent);
+
+            StreamWriter ws = new StreamWriter(strPathFileLog, true);
             ws.WriteLine("Fecha - " + DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") + " - " + strOrigen + " - " + strTexto);
             ws.Close();
             ws.Dispose();
         }
 
+        public static void WriteTextLog(string strTexto, string strOrigen)
+        {
+            WriteTextLog(strTexto, strOrigen, "Log");
+        }
+
         public static void WriteTextLog(string strTexto)
         {
-            WriteTextLog(strTexto, "Contratos Comerciales - cocovi");
+            string applicationNameInWebConfig = ConfigurationManager.AppSettings["ApplicationName"];
+            if (applicationNameInWebConfig == null)
+                applicationNameInWebConfig = "Aplicación";
+            WriteTextLog(strTexto, applicationNameInWebConfig);
         }
 
         /// <summary>
@@ -494,5 +522,12 @@ namespace TumiLabs.Common
                 return (false);
         }
 
+        public static string GetJavaScript(object obj)
+        {
+            StringBuilder sbJs = new StringBuilder();
+
+            return sbJs.ToString();
+
+        }
     }
 }
