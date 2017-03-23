@@ -9,7 +9,7 @@ using System.Xml;
 
 namespace TumiLabs.BaseTaskScheduler
 {
-    public class Common
+    public class TaskBase
     {
         public XmlDocument RecuperarArchivoHistorialEjecucion(out string PathXmlDoc)
         {
