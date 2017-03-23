@@ -59,7 +59,7 @@ namespace TumiLabs.Common
             }
         }
 
-        public bool SendEmail(List<string> destinatarios, List<string> destinatariosCC, string subject, string body)
+        public bool SendEmail(List<string> destinatarios, List<string> destinatariosCC, string subject, string body, bool IsBodyHtml = true)
         {
             string strEmail = string.Empty;
             string strEmailCopiaA = string.Empty;
@@ -111,7 +111,7 @@ namespace TumiLabs.Common
 
             mailMessage.Subject = subject;
             mailMessage.SubjectEncoding = System.Text.Encoding.UTF8;
-            mailMessage.IsBodyHtml = true;
+            mailMessage.IsBodyHtml = IsBodyHtml;
             mailMessage.Body = body;
             mailMessage.BodyEncoding = Encoding.UTF8;
 

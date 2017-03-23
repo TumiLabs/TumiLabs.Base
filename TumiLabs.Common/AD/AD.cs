@@ -79,7 +79,9 @@ namespace TumiLabs.Common
                 oUsuario.CuentaRed = DOMAIN + "\\" + ((string)userInfo.Properties["samaccountname"].Value ?? string.Empty);
                 oUsuario.Email = (string)userInfo.Properties["mail"].Value ?? string.Empty;
                 oUsuario.Nombres = (string)userInfo.Properties["cn"].Value ?? string.Empty;
-
+                oUsuario.Telefono = (string)userInfo.Properties["telephoneNumber"].Value ?? string.Empty;
+                oUsuario.Movil = (string)userInfo.Properties["mobile"].Value ?? string.Empty;
+                oUsuario.Anexo = (string)userInfo.Properties["ipphone"].Value ?? string.Empty;
                 userInfo.Close();
                 adObject.Close();
 
