@@ -491,10 +491,12 @@ namespace TumiLabs.Common
 
         public static void WriteTextLog(string strTexto)
         {
+
             string applicationNameInWebConfig = ConfigurationManager.AppSettings["ApplicationName"];
             if (applicationNameInWebConfig == null)
                 applicationNameInWebConfig = "Aplicación";
             WriteTextLog(strTexto, applicationNameInWebConfig);
+
         }
 
         /// <summary>

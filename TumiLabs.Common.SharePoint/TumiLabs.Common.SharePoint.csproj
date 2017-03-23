@@ -48,6 +48,12 @@
     <Compile Include="DisabledItemEventsScope.cs" />
     <Compile Include="SPUtil.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TumiLabs.Common\TumiLabs.Common.csproj">
+      <Project>{a9f6911a-a255-4a73-be06-71931491ca17}</Project>
+      <Name>TumiLabs.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

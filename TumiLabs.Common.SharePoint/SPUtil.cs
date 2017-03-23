@@ -33,6 +33,7 @@ namespace TumiLabs.Common.SharePoint
                 if (string.IsNullOrEmpty(url))
                     url = "";
                 WriteTextLog(string.Format("El sitio ({0}) no existe", url, ex.ToString()));
+
             }
 
             return web;
@@ -79,6 +80,7 @@ namespace TumiLabs.Common.SharePoint
             return _site.OpenWeb();
         }
 
+
         public static SPWeb getSPWeb(string url)
         {
 
@@ -86,6 +88,7 @@ namespace TumiLabs.Common.SharePoint
 
             return tempSite.OpenWeb();
         }
+
 
         public static List<string> getColumnasCreadasEnSPList(SPWeb spWeb, SPList spList)
         {
@@ -139,7 +142,7 @@ namespace TumiLabs.Common.SharePoint
         public static void AddPermission(SPList list, string groupName, string permissionName)
         {
 
-            SPSecurity.RunWithElevatedPrivileges(delegate ()
+            SPSecurity.RunWithElevatedPrivileges(delegate()
             {
 
                 //SPPrincipal userGroup = FindUserOrSiteGroup(site, groupName);
@@ -366,6 +369,7 @@ namespace TumiLabs.Common.SharePoint
             }
             return bTienePermiso;
         }
+
 
         public static List<string> getEmailFromSPUser(List<SPUser> listadoSPUser)
         {
@@ -682,6 +686,81 @@ namespace TumiLabs.Common.SharePoint
                 //throw;
             }
 
+        }
+
+        public static SPFieldUserValue getUser(SPWeb spWeb, string DisplayName)
+        {
+            //System.Windows.Forms.MessageBox.Show("DisplayName: '" + DisplayName + "'");
+            //SPPrincipalInfo pinfo = SPUtility.ResolvePrincipal(spWeb, DisplayName, SPPrincipalType.User, SPPrincipalSource.All, spWeb.Users, false);
+            SPPrincipalInfo pinfo = SPUtility.ResolvePrincipal(spWeb, DisplayName, SPPrincipalType.All, SPPrincipalSource.All, spWeb.Users, false);
+
+            //if (pinfo == null)
+            //{
+            //    throw new Exception("No se encontro pinfo");
+            //}
+            //else
+            //{
+            //    throw new Exception("Se encontro pinfo: " + pinfo.LoginName);
+            //}
+
+            //SPUser user = spWeb.Users[pinfo.LoginName];
+            //if (user  == null)
+            //{
+            //    throw new Exception("user es nulo. pinfo.LoginName: " + pinfo.LoginName);
+            //}
+            SPFieldUserValue fuv = null;
+            try { fuv = new SPFieldUserValue(spWeb, pinfo.PrincipalId, pinfo.LoginName); }
+            catch (Exception ex)
+            {
+                WriteTextLog(string.Format("Buscar a '{0}', Error: {1}", DisplayName, ex.ToString()));
+                //throw;
+            }
+
+
+            return fuv;
+        }
+
+        public static SPFieldUserValue getUserByLoginName(SPSite site, string LoginName)
+        {
+            SPUser myUser = null;
+
+            //SPClaimProviderManager cpm = SPClaimProviderManager.Local;
+
+            //SPClaim userClaim = cpm.ConvertIdentifierToClaim(LoginName, SPIdentifierTypes.WindowsSamAccountName);
+
+            //if (SPUtility.IsLoginValid(site, userClaim.ToEncodedString()))
+            //{
+            try
+            {
+                myUser = site.RootWeb.EnsureUser(LoginName);
+            }
+            catch (Exception ex)
+            {
+                Utils.WriteTextLog(string.Format("LoginName: {0},  Error: {1}", LoginName, ex.ToString()));
+                //throw;
+            }
+
+            //}
+            //else
+            //{
+            //    WriteTextLog(string.Format("Buscar a LoginName: '{0}', Error: myUser es nulo", LoginName));
+            //}
+
+            SPFieldUserValue fuv = null;
+            if (myUser != null)
+            {
+                try { fuv = new SPFieldUserValue(site.RootWeb, myUser.ID, myUser.LoginName); }
+                catch (Exception ex)
+                {
+                    WriteTextLog(string.Format("Buscar a LoginName: '{0}', Error: {1}", LoginName, ex.ToString()));
+                    //throw;
+                }
+            }
+
+
+            return fuv;
+
+            //return myUser;
         }
 
         public static void WriteTextLog(string strTexto, string strOrigen, string LogFileNameSinExtension)
