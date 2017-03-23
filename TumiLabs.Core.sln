@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TumiLabs.Common", "TumiLabs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TumiLabs.Common.SharePoint", "TumiLabs.Common.SharePoint\TumiLabs.Common.SharePoint.csproj", "{923CEA0F-AEC5-4B72-8A3E-CE9969BD9EE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TumiLabs.BaseTaskScheduler", "TumiLabs.BaseTaskScheduler\TumiLabs.BaseTaskScheduler.csproj", "{45D786A2-7DE7-4A1B-93D5-74175A5F59DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{923CEA0F-AEC5-4B72-8A3E-CE9969BD9EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{923CEA0F-AEC5-4B72-8A3E-CE9969BD9EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{923CEA0F-AEC5-4B72-8A3E-CE9969BD9EE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45D786A2-7DE7-4A1B-93D5-74175A5F59DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D786A2-7DE7-4A1B-93D5-74175A5F59DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D786A2-7DE7-4A1B-93D5-74175A5F59DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D786A2-7DE7-4A1B-93D5-74175A5F59DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
