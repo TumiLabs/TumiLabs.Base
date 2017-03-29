@@ -499,6 +499,45 @@ namespace TumiLabs.Common
 
         }
 
+        public static void WriteInFile(string strTexto, string LogFileNameSinExtension)
+        {
+            string LogFileNameCurrent = string.Empty;
+            string strPathFolderLog = ConfigurationManager.AppSettings["PathLog"];//E:\SharePointFiles\AppCertero\sislegal\Log\
+            DirectoryInfo folderPath = new DirectoryInfo(strPathFolderLog);
+
+            FileInfo[] archivosDeLog = folderPath.GetFiles(string.Format("{0}-????-??-??-??-??.txt", LogFileNameSinExtension)).OrderByDescending(x => x.CreationTime).ToArray();
+            bool bCrearNuevoArchivo = false;
+            if (archivosDeLog.Length > 0)
+            {
+                if (archivosDeLog[0].Length > 104857600)// (1048576 * 100) = 104857600 = 100 MB
+                    bCrearNuevoArchivo = true;
+                else
+                    LogFileNameCurrent = archivosDeLog[0].Name;
+            }
+            else
+                bCrearNuevoArchivo = true;
+
+            if (bCrearNuevoArchivo)
+                LogFileNameCurrent = string.Format("{0}-{1}.txt", LogFileNameSinExtension, DateTime.Now.ToString("yyyy-dd-MM-HH-mm"));
+
+            string strPathFileLog = string.Format("{0}\\{1}", strPathFolderLog, LogFileNameCurrent);
+
+            StreamWriter ws = new StreamWriter(strPathFileLog, true);
+            ws.WriteLine(strTexto);
+            ws.Close();
+            ws.Dispose();
+        }
+
+
+        public static void WriteInFile(string strTexto)
+        {
+
+            string applicationNameInWebConfig = ConfigurationManager.AppSettings["ApplicationName"];
+            if (applicationNameInWebConfig == null)
+                applicationNameInWebConfig = "Aplicación";
+            WriteTextLog(strTexto, applicationNameInWebConfig);
+        }
+
         /// <summary>
         /// puede ser https://localhost:445/index.htm#search
         /// </summary>

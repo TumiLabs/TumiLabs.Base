@@ -11,6 +11,8 @@ namespace TumiLabs.BaseTaskScheduler
 {
     public class TaskBase
     {
+        public bool YaSeEjecutoHoy = false;
+
         public XmlDocument RecuperarArchivoHistorialEjecucion(out string PathXmlDoc)
         {
             string pathExe = Assembly.GetExecutingAssembly().Location;
