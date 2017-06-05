@@ -12,15 +12,22 @@ namespace TumiLabs.Common
 {
     public class AD
     {
-        private string ADPATH = "GC://dc=losportales,dc=com,dc=pe";
-        private string DOMAIN = "CILPSA";
-        private string USERNAME = "shadmsystemfarm";
-        private string PASSWORD = "5H9_$F4rm";
+        private string ADPATH = string.Empty;
+        private string DOMAIN = string.Empty;
+        private string USERNAME = string.Empty;
+        private string PASSWORD = string.Empty;
 
         private DirectoryEntry adObject;
 
         public AD()
         {
+            ADPATH = ConfigurationManager.AppSettings["AD-ADPATH"];
+            DOMAIN = ConfigurationManager.AppSettings["AD-DOMAIN"];
+            USERNAME = ConfigurationManager.AppSettings["AD-USERNAME"];
+            PASSWORD = ConfigurationManager.AppSettings["AD-PASSWORD"];
+            if (ADPATH == null || DOMAIN == null || USERNAME == null || PASSWORD == null)
+                throw new Exception("Parámetros de dominio no creados en el archivo de configuración");
+
             adObject = new DirectoryEntry(ADPATH, USERNAME, PASSWORD, AuthenticationTypes.Secure);
         }
 
