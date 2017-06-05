@@ -14,5 +14,6 @@ namespace TumiLabs.Common
         public string Telefono { get; set; }
         public string Anexo { get; set; }
         public string Movil { get; set; }
+        public string DNI { get; set; }
     }
 }

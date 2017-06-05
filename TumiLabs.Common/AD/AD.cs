@@ -38,8 +38,9 @@ namespace TumiLabs.Common
             return directoryObject;
         }
 
-        public string GetUserNameByCompleteName(string completeName)
+        public UsuarioAD GetUserNameByCompleteName(string completeName)
         {
+            UsuarioAD oUsuario = null;
             DirectoryEntry adObject = GetDirectoryObject();
 
             //filter based on complete name
@@ -49,25 +50,30 @@ namespace TumiLabs.Common
             if (result != null)
             {
                 DirectoryEntry userInfo = result.GetDirectoryEntry();
-
-                //getting user name
-                string userName = (string)userInfo.Properties["samaccountname"].Value ?? string.Empty;
+                oUsuario = new UsuarioAD();
+                oUsuario.CuentaRed = DOMAIN + "\\" + ((string)userInfo.Properties["samaccountname"].Value ?? string.Empty);
+                oUsuario.Email = (string)userInfo.Properties["mail"].Value ?? string.Empty;
+                oUsuario.Nombres = (string)userInfo.Properties["displayName"].Value ?? string.Empty;
+                oUsuario.Telefono = (string)userInfo.Properties["telephoneNumber"].Value ?? string.Empty;
+                oUsuario.Movil = (string)userInfo.Properties["mobile"].Value ?? string.Empty;
+                oUsuario.Anexo = (string)userInfo.Properties["ipphone"].Value ?? string.Empty;
+                oUsuario.DNI = (string)userInfo.Properties["info"].Value ?? string.Empty;
                 userInfo.Close();
                 adObject.Close();
 
-                return DOMAIN + userName;
+                return oUsuario;
             }
             else
             {
                 Utils.WriteTextLog("No existe usuario: " + completeName);
-                return string.Empty;
+                return null;
             }
         }
 
         public UsuarioAD GetUserNameByDNI(string dni)
         {
             UsuarioAD oUsuario = null;
-             
+
             DirectorySearcher searcher = new DirectorySearcher(adObject);
             searcher.Filter = "info=" + dni;
             SearchResult result = searcher.FindOne();
@@ -82,6 +88,7 @@ namespace TumiLabs.Common
                 oUsuario.Telefono = (string)userInfo.Properties["telephoneNumber"].Value ?? string.Empty;
                 oUsuario.Movil = (string)userInfo.Properties["mobile"].Value ?? string.Empty;
                 oUsuario.Anexo = (string)userInfo.Properties["ipphone"].Value ?? string.Empty;
+                oUsuario.DNI = (string)userInfo.Properties["info"].Value ?? string.Empty;
                 userInfo.Close();
                 adObject.Close();
 
@@ -90,6 +97,44 @@ namespace TumiLabs.Common
             else
             {
                 Utils.WriteTextLog("No existe usuario: " + dni);
+                return null;
+            }
+        }
+
+        public UsuarioAD GetUserNameByCuentaRed(string cuentaRed)
+        {
+            string strCuentaRedSinDominio = cuentaRed;
+            if (cuentaRed != null)
+            {
+                string[] strCuentaRed = cuentaRed.Split('\\');
+                strCuentaRedSinDominio = strCuentaRed[strCuentaRed.Length - 1];
+            }
+
+            UsuarioAD oUsuario = null;
+
+            DirectorySearcher searcher = new DirectorySearcher(adObject);
+            searcher.Filter = "samaccountname=" + strCuentaRedSinDominio;
+            SearchResult result = searcher.FindOne();
+
+            if (result != null)
+            {
+                DirectoryEntry userInfo = result.GetDirectoryEntry();
+                oUsuario = new UsuarioAD();
+                oUsuario.CuentaRed = DOMAIN + "\\" + ((string)userInfo.Properties["samaccountname"].Value ?? string.Empty);
+                oUsuario.Email = (string)userInfo.Properties["mail"].Value ?? string.Empty;
+                oUsuario.Nombres = (string)userInfo.Properties["displayName"].Value ?? string.Empty;//cn
+                oUsuario.Telefono = (string)userInfo.Properties["telephoneNumber"].Value ?? string.Empty;
+                oUsuario.Movil = (string)userInfo.Properties["mobile"].Value ?? string.Empty;
+                oUsuario.Anexo = (string)userInfo.Properties["ipphone"].Value ?? string.Empty;
+                oUsuario.DNI = (string)userInfo.Properties["info"].Value ?? string.Empty;
+                userInfo.Close();
+                adObject.Close();
+
+                return oUsuario;
+            }
+            else
+            {
+                Utils.WriteTextLog("No existe usuario: " + cuentaRed);
                 return null;
             }
         }

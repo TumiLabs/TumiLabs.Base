@@ -459,6 +459,8 @@ namespace TumiLabs.Common
         {
             string LogFileNameCurrent = string.Empty;
             string strPathFolderLog = ConfigurationManager.AppSettings["PathLog"];//E:\SharePointFiles\AppCertero\sislegal\Log\
+            if (strPathFolderLog != null && !strPathFolderLog.EndsWith("\\"))
+                strPathFolderLog = strPathFolderLog + "\\";
             DirectoryInfo folderPath = new DirectoryInfo(strPathFolderLog);
 
             FileInfo[] archivosDeLog = folderPath.GetFiles(string.Format("{0}-????-??-??-??-??.txt", LogFileNameSinExtension)).OrderByDescending(x => x.CreationTime).ToArray();

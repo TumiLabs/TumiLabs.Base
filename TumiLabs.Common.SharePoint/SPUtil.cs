@@ -142,7 +142,7 @@ namespace TumiLabs.Common.SharePoint
         public static void AddPermission(SPList list, string groupName, string permissionName)
         {
 
-            SPSecurity.RunWithElevatedPrivileges(delegate()
+            SPSecurity.RunWithElevatedPrivileges(delegate ()
             {
 
                 //SPPrincipal userGroup = FindUserOrSiteGroup(site, groupName);
@@ -765,31 +765,54 @@ namespace TumiLabs.Common.SharePoint
 
         public static void WriteTextLog(string strTexto, string strOrigen, string LogFileNameSinExtension)
         {
-            string LogFileNameCurrent = string.Empty;
+            string strEnabledLog = ConfigurationManager.AppSettings["EnabledLog"];//True|False
+            if (string.IsNullOrEmpty(strEnabledLog))
+                return;
+
+            if (!strEnabledLog.Equals("True"))
+                return;
+
             string strPathFolderLog = ConfigurationManager.AppSettings["PathLog"];//E:\SharePointFiles\AppCertero\sislegal\Log\
-            DirectoryInfo folderPath = new DirectoryInfo(strPathFolderLog);
+            if (strPathFolderLog.EndsWith("\\"))
+                strPathFolderLog = string.Format("{0}\\", strPathFolderLog);
 
-            FileInfo[] archivosDeLog = folderPath.GetFiles(string.Format("{0}-????-??-??-??-??.txt", LogFileNameSinExtension)).OrderByDescending(x => x.CreationTime).ToArray();
-            bool bCrearNuevoArchivo = false;
-            if (archivosDeLog.Length > 0)
+            string LogFileNameCurrent = string.Format("{0}-{1}.txt", LogFileNameSinExtension, DateTime.Now.Month); //string.Format("{0}\\{1}", strPathFolderLog,lo);
+            string strPathAbsoluteFile = string.Format("{0}{1}", strPathFolderLog, LogFileNameCurrent);
+
+            #region Archivos por Peso
+            //string LogFileNameCurrent = string.Empty;
+            //string strPathFolderLog = ConfigurationManager.AppSettings["PathLog"];//E:\SharePointFiles\AppCertero\sislegal\Log\
+            //DirectoryInfo folderPath = new DirectoryInfo(strPathFolderLog);
+
+            //FileInfo[] archivosDeLog = folderPath.GetFiles(string.Format("{0}-????-??-??-??-??.txt", LogFileNameSinExtension), SearchOption.TopDirectoryOnly).OrderByDescending(x => x.CreationTime).ToArray();
+            //bool bCrearNuevoArchivo = false;
+            //if (archivosDeLog.Length > 0)
+            //{
+            //    if (archivosDeLog[0].Length > 104857600)// (1048576 * 100) = 104857600 = 100 MB
+            //        bCrearNuevoArchivo = true;
+            //    else
+            //        LogFileNameCurrent = archivosDeLog[0].Name;
+            //}
+            //else
+            //    bCrearNuevoArchivo = true;
+
+            //if (bCrearNuevoArchivo)
+            //    LogFileNameCurrent = string.Format("{0}-{1}.txt", LogFileNameSinExtension, DateTime.Now.ToString("yyyy-dd-MM-HH-mm"));
+
+            //string strPathFileLog = string.Format("{0}\\{1}", strPathFolderLog, LogFileNameCurrent);
+
+            //using (StreamWriter ws = new StreamWriter(strPathFileLog, true))
+            //{
+            //    ws.WriteLine("Fecha - " + DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") + " - " + strOrigen + " - " + strTexto);
+            //    ws.Close();
+            //}
+            #endregion
+
+            using (StreamWriter ws = new StreamWriter(strPathAbsoluteFile, true))
             {
-                if (archivosDeLog[0].Length > 104857600)// (1048576 * 100) = 104857600 = 100 MB
-                    bCrearNuevoArchivo = true;
-                else
-                    LogFileNameCurrent = archivosDeLog[0].Name;
+                ws.WriteLine("Fecha - " + DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") + " - " + strOrigen + " - " + strTexto);
+                ws.Close();
             }
-            else
-                bCrearNuevoArchivo = true;
-
-            if (bCrearNuevoArchivo)
-                LogFileNameCurrent = string.Format("{0}-{1}.txt", LogFileNameSinExtension, DateTime.Now.ToString("yyyy-dd-MM-HH-mm"));
-
-            string strPathFileLog = string.Format("{0}\\{1}", strPathFolderLog, LogFileNameCurrent);
-
-            StreamWriter ws = new StreamWriter(strPathFileLog, true);
-            ws.WriteLine("Fecha - " + DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss") + " - " + strOrigen + " - " + strTexto);
-            ws.Close();
-            ws.Dispose();
         }
 
         public static void WriteTextLog(string strTexto, string strOrigen)
